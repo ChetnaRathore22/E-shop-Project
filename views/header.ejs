@@ -1,0 +1,168 @@
+<%-include('externalink.ejs')%>
+
+
+    <header class="main-header">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+            <div class="container">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu"
+                        aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><img src="/images/logo.png" class="logo" alt=""></a>
+                </div>
+                <!-- End Header Navigation -->
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/category/all">Product</a></li>
+                        <% if(!currentUser){%>
+
+                            <li class="nav-item"><a class="nav-link" href="/signIn">SignIn</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/signUp">SignUp</a></li>
+                            <%}else{%>
+                                <li class="nav-item"><a class="nav-link" href="/signout">SignOut</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/order/History">My Order</a></li>
+
+
+                                <%}%>
+
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input onkeyup="searchProduct(this.value)" class="form-control mr-sm-2" type="search"
+                            placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                <!-- /.navbar-collapse -->
+
+                <!-- Start Atribute Navigation -->
+                <div class="attr-nav">
+                    <ul>
+                        <li class="side-menu">
+                            <a href="/cart/viewcart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="badge">
+                                    <%=cartItem.length%>
+                                </span>
+                            </a>
+
+                        </li>
+                        <li class="side-menu" class="nav-link">
+                            <a href="/wishList/view">
+                                <i class="fa fa-heart text-danger"></i>
+
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+
+
+
+                <!-- End Atribute Navigation -->
+            </div>
+            <!-- Start Side Menu -->
+
+            <div class="top-search">
+                <div class="container">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <script>
+        function searchProduct(keyword) {
+            // window.alert("hello");
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "/product/search/" + keyword, true);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+
+                if (xhttp.readyState == 4) {
+                    let data = xhttp.responseText;
+                    data = JSON.parse(data);
+                    let productDisplay = "";
+                    for (let product of data.productList) {
+                        let priceString = " ";
+                        if (product.discountPercentage) {
+                            priceString = '<span>&#8377</span>' +
+                                '<del class="text-danger">' + product.price + '</del><br>Deal of The Day:' +
+                                '<span class="text-success">' + Math.round(product.price - (product.price) * (product.discountPercentage) / 100) + 'Rs.</span>'
+                        } else {
+                            priceString = '<span class="text-success">' + product.price + '</span>'
+
+                        }
+
+
+                        productDisplay = productDisplay  +
+                            '<div class="col-lg-3 col-md-6 col-6  special-grid best-seller ">' +
+                            '<div class="products-single fix" style="box-shadow: 5px 5px 5px;">' +
+                            '<div class="box-img-hover">' +
+                            '<div class="type-lb">' +
+                            '<p class="sale">Sale</p>' +
+                            '</div>' +
+                            '<img src="' + product.thumbnail + '" style="width:100%; height: 300px;"/>' +
+
+                            '<div class="mask-icon">' +
+                            '<ul>' +
+                            '<li><a <a  href="/viewMore/"' + product.id + '" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>' +
+                            '<li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>' +
+                            '<li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>' +
+                            '</ul>' +
+                            '<div class="text-center">' +
+                            '<%if (currentUser) {%>' +
+                            '<a class="" onclick="addInToCart(' +(data.currentUser.id*1+1240)+ ', ' + (product.id * 1 + 2342) + ')">' +
+                            ' <button  class="btn btn-danger cartbutton ">Add To Cart</button>' +
+                            '</a>' +
+                            '<%} else {%>' +
+                            '<a href="/cart/add-to-cart">' +
+                            ' <button  class="btn btn-danger cartbutton  ">Add To Cart</button>' +
+                            '</a >' +
+                            '<%}%>'+
+
+                        '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="why-text">' +
+                            '<h4><' + product.title.substring(0,20)+ '</h4>' +
+                            '<h4>MRP:' + priceString + '</h4>' +
+
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                    }
+                    document.getElementById("contentdisplay").innerHTML = productDisplay;
+                    
+                }
+            }
+        }
+
+        function addInCart(userId, productId) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "/cart/add-to-cart/" + userId + "/" + productId, true);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4) {
+                    let data = JSON.parse(xhttp.responseText);
+                    window.alert(data.message);
+                }
+            }
+        }
+
+    </script>
+    <script>
+
+
+    </script>

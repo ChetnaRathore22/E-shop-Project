@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WishList</title>
+    <style>
+      .wishlistButton{
+        margin-top: 145px;
+        margin-left: 145px;
+      }
+    </style>
+</head>
+<body>
+
+    <%- include('header.ejs')%>
+    <%- include('externalink')%>
+    <%console.log(wishList)%>
+    <div class="container">
+        <div class="row p-3">
+            <h3 class="ordersummary">YOUR WISHLIST</h3>
+          </div>
+    <div class="row special-list" >
+        
+        <%wishList.map((product,index)=>{%>
+       
+
+        <div class="col-lg-3 col-md-6 special-grid best-seller">
+            <div class="products-single fix" style='box-shadow: 5px 5px 5px;'>
+                <div class="box-img-hover">
+                    
+                        
+                       
+                    <div class="type-lb">
+                        <p class="sale">Sale</p>
+                    </div>
+                    <img src="<%=product.thumbnail%>" style='width:100%; height: 300px;'/>
+                    <div class="mask-icon">
+                        <ul>
+
+                            <li><a  href="/viewMore/<%=product.id%>" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                            
+                            <%if(currentUser){%>
+                            <li><a   onclick="status('<%=product.id%>','status')" data-toggle="tooltip" data-placement="right" title="Add to Wishlist">
+                                <i id='heart' class="bi bi-suit-heart"></i></a></li>
+                            <%}else{%>
+                                <li><a href="/wishlist/''/''"   data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="bi bi-suit-heart"></i></a></li>
+                            <%}%>
+                        </ul>
+                        <div class="text-center">
+                         
+                            <%if(currentUser){%>  
+                            <a onclick="addInCart('<%=currentUser.id*1+1240%>','<%=product.id*1 + 2342%>')">
+                              <button  class="btn btn-danger wishlistButton ">Add To Cart</button>
+                            </a>
+                            <%}else{%>
+                              <a href="/cart/add-to-cart/''/''">
+                                 <button  class="btn btn-danger wishlistButton ">Add To Cart</button>
+                               </a>
+                              <%}%>  
+                           </div>
+                    </div>
+                   
+                </div>
+                <div class="why-text">
+                    <h4><%=product.title.substring(0,20)%></h4>
+                    <h4>MRP:
+                       <% if(product.discountPercentage){%><span>&#8377</span>
+                        <del class="text-danger"> <%=product.price%></del><br>Deal of The Day:
+                        <span class="text-success"><%=Math.round(product.price-(product.price)*(product.discountPercentage)/100)%>Rs.</span>
+                        <%}else{%>
+                            <span class="text-success"><%=product.price%></span>
+
+                       <%}%>
+                        </h4>  
+                        
+                        <a href="/wishlist/delete/<%=index%>/<%=product.status%>">  
+                            <i class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a>
+                        </a> 
+                </div>
+            </div>
+        </div>
+        <%})%>
+    </div>
+</div>
+</body>
+<%- include('externalscript')%>
+</html>

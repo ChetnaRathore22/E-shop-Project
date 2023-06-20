@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderHistory</title>
+    <style>
+        .thead{
+            background-color: red;
+            color: white;
+        }
+        
+    </style>
+</head>
+<body>
+    <%- include('topbar.ejs')%>
+    <%-include('externalink.ejs')%>
+
+    <%- include('header.ejs')%>
+    <div class="container">
+        <table class="table border thead-light mt-4 p-1 col-lg-12 col-sm-6 col-md-6" cellspacing="5px" cellpadding="5px";style='border:1px solid;'>
+            <thead class="thead">
+                <th>S.No</th>
+                <th>OrderId</th>
+                <th>Name</th>
+                <th>Payment</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+                <%orderData.map((order,index)=>{%>
+                <tr>
+                <td><%=index*1+1%></td>
+               
+                <td> <a href="/order/myorder/<%=order.id%>"><%=order.id%></a></td>
+                <td><%=order.contactPerson%></td>
+                <td><%=order.paymentMode%></td>
+                <td>Cash</td>
+                <td><%=order.status%></td>
+                <td><span style="color: red;">&#8377</span><%=order.billamount%></td>
+              </tr>
+                <%})%>
+
+            </tbody>
+
+        </table>
+    </div>
+    <%- include('footer.ejs')%>
+
+   <%- include('externalscript.ejs')%>
+    
+</body>
+</html>

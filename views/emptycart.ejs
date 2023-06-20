@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .incart{
+            
+        }
+        .mycart{
+            position: absolute;
+            top:70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 500px;
+            width: 700px;
+            
+           
+        }
+    </style>
+</head>
+<body>
+    <%- include('topbar.ejs')%>
+    <%- include('externalink.ejs')%>
+    
+    <%- include('externalscript.ejs')%>
+    <%- include('header.ejs')%>
+    
+    <div class="container">
+        <div class="heading1 p-3"><h3 style="text-align: start; text-decoration: underline;">  <i class="fa fa-shopping-bag text-danger" aria-hidden="true"></i>
+            My Cart</h3></div>
+       
+        <div class="mycart">
+            <div style="align-items: center; height: 250px; width:250px ; margin:auto;margin-top: 100px;background-color:lightgray;border-radius: 50%;" >
+            <img src="/images/cartempty.png" alt="" height="200px" width="200px" style="text-align: center;margin-left: 15px;margin-top: 30px;">
+           </div>
+           <div style="height: 100px;width: 100%;text-align: center;padding: 10px;">
+            <h5>Your Cart is Empty</h5>
+            <h6>Looks Like You Have Not Added anything to You Cart.Go Ahead & Explore Top Products</h6>
+            <a href="/">
+            <button type="button" class=" btn btn-danger">GO SHOOPING</button>
+            </a>
+        </div>
+      
+        
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('topbar.ejs')%>
+
+<head>
+   
+   <%-include('externalink.ejs')%>
+   <style>
+    .cartbutton{
+        float: right;
+        margin-top: 145px;
+        width:40%;
+        background: red;
+    }
+    .categorydiv{
+         box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;;
+        /* position: fixed; */
+        /* left: 0%; */
+        background-color:whitesmoke;
+   
+    }
+    #categoryName{
+        color:black; text-transform: capitalize; font-size:18px;
+    }
+   
+   </style>
+   
+
+</head>
+
+<body>
+
+    <%- include('header.ejs')%>
+  
+    <div class="top-search">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+   
+   
+     <!-- <div class="col-lg-12">
+        <br>
+        <div class="title-all text-center">
+           
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+        </div>
+    </div> -->
+    <div class="container-fluid">
+    <div class="row display:flex">
+     <!-- <div class="instagram-box"> -->
+
+       
+        <div class="col-md-2 mt-2  categorydiv">
+            <h1 class="ordersummary">Featured Categories</h1>
+            <%categoryList.map((category,index)=>{%>
+            <div class="item text-align:center">
+                <p class="">
+                    <a href="/product/<%=category.categoryName%>">
+                       <h3 id='categoryName'><%=category.categoryName%></h3>
+                    </a>
+                   
+                </p>
+            </div>
+            <%})%>
+  
+    </div>
+    <!-- <div class="col-md-2 categorydiv" style="border:1px solid red"></div> -->
+    <!-- </div> -->
+    
+    <div class=" col-md-10 products-box" >
+        <div class="row" id="contentdisplay">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>Featured Categories</h1>
+
+                </div>
+            </div>
+        </div>
+        <!-- <div class="container"  > -->
+           
+          <div class="row special-list" style="display: flex;">
+                <%productList.map((product,index)=>{%>
+               
+
+                <div class="col-lg-3 col-6 col-sm-6 special-grid best-seller ">
+                    <div class="products-single fix" style="box-shadow: 5px 5px 5px;">
+                        <div class="box-img-hover">
+                            
+                                
+                               
+                            <div class="type-lb">
+                                <p class="sale">Sale</p>
+                            </div>
+                            <img src="<%=product.thumbnail%>" style="width:100%; height: 300px;"/>
+                            <div class="mask-icon">
+                                <ul>
+                                    <li><a  href="/viewMore/<%=product.id%>" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                    <%if(currentUser){%>
+                                        
+                                        <li><a   onclick="status('<%=product.id%>','status')" data-toggle="tooltip" data-placement="right" title="Add to Wishlist">
+                                            <i id='heart' class="bi bi-suit-heart"></i></a></li>
+                                        <%}else{%>
+                                            <li><a href="/wishlist/''/''"   data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="bi bi-suit-heart"></i></a></li>
+                                        <%}%>
+                                </ul>
+                                <div class="text-center">
+                                 
+                                    <%if(currentUser){%>  
+                                    <a onclick="addInCart('<%=currentUser.id*1+1240%>','<%=product.id*1 + 2342%>')">
+                                      <button  class="btn btn-danger cartbutton ">Add To Cart</button>
+                                    </a>
+                                    <%}else{%>
+                                      <a href="/cart/add-to-cart/''/''">
+                                         <button  class="btn btn-danger cartbutton ">Add To Cart</button>
+                                       </a>
+                                      <%}%>  
+                                   </div>
+                            </div>
+                           
+                        </div>
+                        <div class="why-text">
+                            <h4><%=product.title.substring(0,20)%></h4>
+                            <h4>MRP:
+                               <% if(product.discountPercentage){%><span>&#8377</span>
+                                <del class="text-danger"> <%=product.price%></del><br>Deal of The Day:
+                                <span class="text-success"><%=Math.round(product.price-(product.price)*(product.discountPercentage)/100)%>Rs.</span>
+                                <%}else{%>
+                                    <span class="text-success"><%=product.price%></span>
+
+                               <%}%>
+                                </h4>
+
+                               
+                            
+                           
+                        </div>
+                    </div>
+                </div>
+                <%})%>
+            <!-- </div> -->
+        </div>
+    </div>
+    </div>
+    </div>
+    <!-- End Products  -->
+
+    <!-- Start Blog  -->
+    
+    
+    <%- include('footer.ejs')%>
+
+   <%- include('externalscript.ejs')%>
+   <script>
+    function addInCart(userId, productId){
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET","/cart/add-to-cart/"+userId+"/"+productId,true);
+      xhttp.send();
+      xhttp.onreadystatechange = function(){
+        if(xhttp.readyState == 4){
+          let data = JSON.parse(xhttp.responseText);
+          window.alert(data.message);
+        }
+      }
+    }
+
+ </script>
+
+</body>
+
+</html>

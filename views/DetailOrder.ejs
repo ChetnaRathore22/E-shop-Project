@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%-include('externalink.ejs')%>
+</head>
+<style>
+  
+.heading{
+  height: 40px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  
+}
+  .tablecontain{
+   display: flex;
+   height: 50px;
+  
+  }
+  .tablecontain:hover{
+    box-shadow:5px 5px 5px ;
+  }
+  .contain{
+      height: 50px;
+      width: 175px;
+      /* border: 1px solid red; */
+      text-align: center;
+  }
+  .order{
+    position: absolute;
+    top:70%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    background-color: whitesmoke;  
+    padding: 10px;
+  }
+  
+</style>
+
+<body>
+  <%console.log(orderData)%>
+    <%- include('topbar.ejs')%>
+    
+
+      <%- include('header.ejs')%>
+        <div class="container">
+          <div class="row p-3">
+            <h3 class="ordersummary">All Orders</h3>
+          </div>
+         
+              <div class="col-md-10 col-lg-10 border order p- mt-3 ms-3 " style="overflow-y: scroll;height: 300px;">
+                <div class="heading" style="background-color: red;color: white;">
+                 <div class="contain">S.No</div>
+                 <div class="contain">OrderId</div>
+                 <div class="contain">Name</div>
+                 <div class="contain">Payment</div>
+                 <div class="contain">Status</div>
+                 <div class="contain">Type</div>
+                 <div class="contain">TotalBill</div>
+                 <div class="contain">Action</div>
+                </div>
+               
+                <%orderData.map((order,index)=>{%>
+                  <div class="tablecontain m-4">
+                    <div class="contain"><%=index*1+1%></div>
+                    <div class="contain"><%=order.id%></div>
+                    <div class="contain"><%=order.contactPerson%></div>
+                    <div class="contain">Cash</div>
+                    <div class="contain"><%=order.status%></div>
+                    <div class="contain"><%=order.paymentMode%></div>
+                    <div class="contain"><%=order.billamount%><span>&#8377</span></div>
+                    <div class="contain">
+                      <a href="">
+                      <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                   </div>
+                   <hr style="border-bottom: 1px solid lightgray;">
+                   <%})%>
+              
+              </div>
+            </div>
+            <%- include('externalscript.ejs')%>
+
+</body>
+
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%-include('externalink.ejs')%>
+</head>
+<style>
+  
+.heading{
+  height: 40px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  
+}
+  .tablecontain{
+   display: flex;
+   height: 50px;
+  
+  }
+  .tablecontain:hover{
+    box-shadow:5px 5px 5px ;
+  }
+  .contain{
+      height: 50px;
+      width: 175px;
+      /* border: 1px solid red; */
+      text-align: center;
+  }
+  .order{
+    position: absolute;
+    top:70%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    background-color: whitesmoke;  
+    padding: 10px;
+  }
+  
+</style>
+
+<body>
+  <%console.log(orderData)%>
+    <%- include('topbar.ejs')%>
+    
+
+      <%- include('header.ejs')%>
+        <div class="container">
+          <div class="row p-3">
+            <h3 class="ordersummary">All Orders</h3>
+          </div>
+         
+              <div class="col-md-10 col-lg-10 border order p- mt-3 ms-3 " style="overflow-y: scroll;height: 300px;">
+                <div class="heading" style="background-color: red;color: white;">
+                 <div class="contain">S.No</div>
+                 <div class="contain">OrderId</div>
+                 <div class="contain">Name</div>
+                 <div class="contain">Payment</div>
+                 <div class="contain">Status</div>
+                 <div class="contain">Type</div>
+                 <div class="contain">TotalBill</div>
+                 <div class="contain">Action</div>
+                </div>
+               
+                <%orderData.map((order,index)=>{%>
+                  <div class="tablecontain m-4">
+                    <div class="contain"><%=index*1+1%></div>
+                    <div class="contain"><%=order.orderDetailsId%></div>
+                    <div class="contain"><%=order.contactPerson%></div>
+                    <div class="contain">Cash</div>
+                    <div class="contain"><%=order.status%></div>
+                    <div class="contain"><%=order.paymentMode%></div>
+                    <div class="contain"><%=order.billamount%><span>&#8377</span></div>
+                    <div class="contain">
+                      <a href="/detail">:</a>
+                      <!-- <a href="order/detail"> -->
+                      <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                      <!-- </a> -->
+                    </div>
+                   </div>
+                   <hr style="border-bottom: 1px solid lightgray;">
+                   <%})%>
+              
+              </div>
+            </div>
+            <%- include('externalscript.ejs')%>
+
+</body>
+
+</html>

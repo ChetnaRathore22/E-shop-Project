@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%-include('externalink.ejs')%>
+</head>
+<style>
+  .reviewcontainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 380px;
+    /* border: 1px solid gold; */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  }
+
+  .rating {
+    font-size: 25px;
+  }
+
+</style>
+
+<body>
+
+  <%- include('topbar.ejs')%>
+
+
+    <%- include('header.ejs')%>
+
+
+      <div class="container" style="overflow-y: scroll;height: 500px;">
+        <div class="row p-3">
+          <h3 class="ordersummary">All Orders</h3>
+        </div>
+
+
+        <%orderData.map((order,index)=>{%>
+          <div class="orderDiv row">
+            <h6>
+              <%=index*1+1%>.
+            </h6>
+            <div class="customerOrder">
+
+              <div style="width: 400px;">
+
+                <h6><span class="text-danger">OrderId -</span>
+                  <%=order.orderDetailsId%>
+                </h6>
+                <h6><span class="text-danger">Date :</span>
+                  <%=order.date%>
+                </h6>
+                <h6><span class="text-danger">Contact Person Name -</span>
+                  <%=order.contactPerson%>
+                </h6>
+              </div>
+              <div style="width: 400px;">
+
+                <h6><span class="text-danger">Contact Number -</span>
+                  <%=order.contactNumber%>
+                </h6>
+                <h6><span class="text-danger">Delivery Address -</span>
+                  <%=order.delieveryAddress%>
+                </h6>
+                <h6><span class="text-danger">Payment Mode -</span> Cash On Delievery</h6>
+              </div>
+            </div>
+            <hr style="border-bottom: 1px solid lightgray;">
+            <div class="orderContain mt-3">
+              <div class="contain"><img src="<%=order.thumbnail%>" alt="" height="100px" width="120px"></div>
+              <div class="contain1">
+                <h6>
+                  <%=order.description.substring(0,35)%>
+                </h6>
+                <h6><span class="text-danger">Brand -</span>
+                  <%=order.brand%>
+                </h6>
+              </div>
+              <div class="contain"><span class="text-danger">Status</span> :&nbsp;<%=order.status%>
+              </div>
+
+              <div class="contain"><span style="color: red;"> Total Bill :&#8377</span>&nbsp;<%=order.billamount%>
+              </div>
+              <div class="contain">
+
+                <a onclick="setdata('<%=order.orderDetailsId%>','<%=order.productId%>')">
+                  <button type="button" class="btn btn-danger " data-toggle="modal" data-target="#exampleModal"
+                    style="margin-top: 30px;">Write Product
+                    Review</button>
+                </a>
+
+              </div>
+            </div>
+          </div>
+          <hr style="border-bottom: 1px solid lightgray;">
+          <%})%>
+
+      </div>
+
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- <div class="modal-header">
+                <h4>Review </h4>
+              </div> -->
+
+            <div class="modal-body">
+
+              <form action="/review/Save" method="post">
+                
+
+                <div class=" mt-4 p-0">
+                  <h5 class="text-danger">Add a Written Review</h5>
+                  <textarea name="comment" id="" cols="50" rows="5"></textarea>
+                </div>
+                <div style="float:right;">
+                  <input type="hidden" name="orderId" id="orderId">
+                  <input type="hidden" name="productId" id="productId">
+                  <button type="hidden" onclick="alert('Your FeedBack Added SuccesFully')" class="btn btn-danger mt-2 "
+                    style="justify-items: end;">submit</button>
+                </div>
+              </form>
+            </div>
+
+
+
+          </div>
+
+        </div>
+      </div>
+
+
+      <script>
+  
+
+        function setdata(orderId, productId) {
+         
+          document.getElementById("orderId").value = orderId;
+          document.getElementById("productId").value = productId;
+        }
+      </script>
+
+      <%- include('footer.ejs')%>
+
+        <%- include('externalscript.ejs')%>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%-include('topbar.ejs')%>
+  <%-include('externalink.ejs')%>
+</head>
+
+<body>
+  <script>
+
+
+    function loadItem() {
+      // window.alert("cvbnm");
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "/cart/load-cart", true);
+      xhttp.send();
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4) {
+          let data = JSON.parse(xhttp.responseText);
+          let totalbillamount = 0;
+          data = data.map((Item, index) => {
+            Item.qty = 1;
+            totalbillamount = (totalbillamount + Item.price)-(Item.discountPercentage);
+            return Item;
+
+
+          })
+          document.getElementById("totalbillamount").innerHTML = totalbillamount;
+          localStorage.setItem("cart-Item", JSON.stringify(data));
+        }
+      }
+    }
+
+
+    function changeQty(index) {
+      let updateqty = document.getElementById("qty" + index).value;
+      let productPrice = document.getElementById("price" + index);
+      let totalbill = document.getElementById("totalbillamount");
+
+      let data = localStorage.getItem("cart-Item");
+      data = JSON.parse(data);
+      // window.alert(data);
+
+      data[index].qty = updateqty;
+      let updateprice = updateqty * data[index].price;
+      productPrice.innerHTML = " " + updateprice;
+      let amount = 0;
+
+      data.map((item, index) => {
+        amount =Math.round(amount + item.price * item.qty)-(item.discountPercentage);
+      });
+      totalbill.innerHTML = " " + amount;
+      localStorage.setItem("cart-Item", JSON.stringify(data));
+
+    }
+
+    loadItem();
+
+
+    function getDataFromStorage() {
+      // window.alert("vgbhjk");
+      let hiddenData = document.getElementById("placeCart");
+      hiddenData.value = localStorage.getItem("cart-Item");
+      // window.alert("zxcvbnm");
+
+    }
+  </script>
+
+
+
+  <%- include('header.ejs')%>
+  
+ 
+    <div class="container">
+      <div class="heading1 p-3"><h3 style="text-align: center; ">  <i class="fa fa-shopping-bag text-danger" aria-hidden="true"></i>
+        My Cart</h3></div>
+      <div class="row" >
+        <div class="col-md-8 col-lg-8 p- mt-3 ms-3 " style="overflow-y: scroll;height: 500px;">
+          <div class="row headingcart">
+
+            <div class="col-md-2  heading1">S.No</div>
+            <div class="col-md-2  heading1">Item</div>
+            <div class="col-md-2  heading1">Title</div>
+            <div class="col-md-2  heading1">Brand</div>
+            <div class="col-md-1  heading1">Qty</div>
+            <div class="col-md-2  heading1">Price</div>
+            <div class="col-md-1  heading1"></div>
+
+          </div>
+          <hr style="border-bottom: 1px solid lightgray;">
+          <%cartItem.map((cart,index)=>{%>
+
+            <div class="row  cartbox">
+              <div class="col-md-2 ">
+                <%=index*1+1%>
+              </div>
+              <div class="col-md-2 "><img src="<%=cart.thumbnail%>" height="100px" width="100px" alt=""></div>
+              <div class="col-md-2 heading1">
+                <%=cart.title.substring(0,20)%>
+              </div>
+              <div class="col-md-2 heading1">
+                <%=cart.brand%>
+              </div>
+              <div class="col-md-1 me-3"><input type="number" onchange="changeQty('<%=index%>')" min="1" value="1"
+                  id="qty<%=index%>" max="<%=cart.stock%>" style="width: 50px;"></div>
+              <%if(cart.discountPercentage){%>
+
+                <div class="col-md-2 ">MRP <span>&#8377</span> <span class="text-danger" id="price<%=index%>">
+                    <%=cart.price%>
+                </span><br><span class="text-success" id="price<%=index%>">
+                    <!-- <%=cart.price - cart.discountPercentage%> -->
+                  </span></div>
+                <%}else{%>
+                  <div class="col-md-2 "><span>&#8377</span><span id="price<%=index%>">
+                      <%=cart.price%>
+                    </span></div>
+                  <%}%>
+                    <div class="col-md-1">
+                      <a  onclick=" return alert('Did you Want to Delete This product')" href="/cart/deleteCart/<%=cart.id%>">
+                        <i class="fa fa-trash" aria-hidden="true" style="color: red;"></i></a>
+                    </div>
+            </div>
+            <hr style="border-bottom: 1px solid lightgray;">
+
+            <%})%>
+
+        </div>
+        <div class="col-md-3  p-3 orderSummaryContainer">
+
+          <h3 class="ordersummary">Order Summary</h3> <br>
+          <h3 class="heading1">Total Items : <%=cartItem.length%>
+          </h3>
+          <h3 class="heading1">Shipping Cost :Free
+          <h6 class="heading1">Total Amount :<span>&#8377</span>&nbsp;<span id="totalbillamount"></span></h6>
+          <button onclick="getDataFromStorage()" class="btn btn-danger w-100" data-toggle="modal"
+            data-target="#exampleModal">CheckOut</button>
+
+        </div>
+      </div>
+     
+       
+        <!-- <div class="row " style="background-color: whitesmoke; box-shadow: 10px 10px 10px; height: 500px;justify-content: center;margin-top: auto;" >
+          <img src="/images/cartempty.png" alt="emptyimage" style="width:200px;height: 200px;" >
+        </div>
+       -->
+      
+    </div>
+
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form action="/order/save" method="post">
+
+
+            <input type="hidden" name="cartItem" id="placeCart">
+            <div class="modal-header">
+              <h5 class="modal-title text-danger placeorderheading" id="exampleModalLabel">Delivery Information</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <div class="form-group">
+                <label>Contact Person Name</label>
+                <input type="text" name="contactPerson" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label>Contact Number</label>
+                <input type="text" name="contactNumber" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea class="form-control" name="deliveryAddress"></textarea>
+              </div>
+
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary heading1" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger heading1 ">Place Order</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <%- include('externalscript.ejs')%>
+
+</body>
+
+</html>

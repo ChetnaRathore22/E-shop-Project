@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('topbar.ejs')%>
+
+<head>
+   
+   <%-include('externalink.ejs')%>
+   <style>
+    .cartbutton{
+        float: right;
+        margin-top: 145px;
+        width:40%;
+        background: red;
+    }
+   </style>
+   
+
+</head>
+
+<body>
+<%console.log(wishList)%>
+    <%- include('header.ejs')%>
+  
+    <div class="top-search">
+        <div class="container">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+   
+    <div id="slides-shop" class="cover-slides" >
+        <ul class="slides-container" >
+            <li class="text-left">
+                <img src="https://template63717.motopreview.com/mt-demo/63700/63717/mt-content/uploads/2017/05/mt-0984-home-slider2.jpg" style="height: 400px;width: 100%; " alt="">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20 text-danger"><strong>Welcome To <br>Eshop</strong></h1>
+                            <p class="m-b-40 text-dark">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                             <p><a class="btn hvr-hover text-dark" href="#">Shop New</a></p>
+                        </div> 
+                    </div>
+                </div>
+              
+            </li>
+            <li class="text-center">
+                <img src="https://images-eu.ssl-images-amazon.com/images/G/31/img23/acc/apr/ACCESSORIES-DAYS_3000x1200._CB592186175_.jpg" style="height: 400px;width: 100%;" alt="">
+               
+            </li>
+            <li class="text-right">
+                <img src="https://images-eu.ssl-images-amazon.com/images/G/31/saba/Summer_cooling_days_hero_3000_x_1200_Yellow._CB590558342_.jpg"  style="height: 400px;width: 100%;" alt="">
+               
+            </li>
+        </ul>
+       
+    </div>
+  
+     <div class="col-lg-12">
+        <br>
+        <div class="title-all text-center">
+            <h1>Featured Categories</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+        </div>
+    </div>
+     <div class="instagram-box">
+        <div class="main-instagram owl-carousel owl-theme">
+            <%categoryList.map((category,index)=>{%>
+            <div class="item">
+                <div class="ins-inner-box">
+                    <a href="/product/<%=category.categoryName%>">
+                       <h3 style="color:black; text-transform: capitalize; font-size:18px;"><%=category.categoryName%></h3>
+                    </a>
+                   
+                </div>
+            </div>
+            <%})%>
+  
+    </div>
+    </div>
+    
+    <div class="products-box" >
+        <div class="container">
+            <div class="row" id="contentdisplay">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>Featured Products</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="special-menu text-center">
+                       
+                    </div>
+                </div>
+            </div>
+
+            <div class="row special-list" >
+                <%productList.map((product,index)=>{%>
+               
+
+                <div class="col-lg-3 col-md-6 special-grid best-seller">
+                    <div class="products-single fix" style='box-shadow: 5px 5px 5px;'>
+                        <div class="box-img-hover">
+                            
+                                
+                               
+                            <div class="type-lb">
+                                <p class="sale">Sale</p>
+                            </div>
+                            <img src="<%=product.thumbnail%>" style='width:100%; height: 300px;'/>
+                            <div class="mask-icon">
+                                <ul>
+
+                                    <li><a  href="/viewMore/<%=product.id%>" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                    
+                                    <%if(currentUser){%>
+                                        
+                                    <li><a   onclick="status('<%=product.id%>','status')" data-toggle="tooltip" data-placement="right" title="Add to Wishlist">
+                                        <i id='heart' class="bi bi-suit-heart"></i></a></li>
+                                    <%}else{%>
+                                        <li><a href="/wishlist/''/''"   data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="bi bi-suit-heart"></i></a></li>
+                                    <%}%>
+                                </ul>
+                                <div class="text-center">
+                                 
+                                    <%if(currentUser){%>  
+                                    <a onclick="addInCart('<%=currentUser.id*1+1240%>','<%=product.id*1 + 2342%>')">
+                                      <button  class="btn btn-danger cartbutton ">Add To Cart</button>
+                                    </a>
+                                    <%}else{%>
+                                      <a href="/cart/add-to-cart/''/''">
+                                         <button  class="btn btn-danger cartbutton ">Add To Cart</button>
+                                       </a>
+                                      <%}%>  
+                                   </div>
+                            </div>
+                           
+                        </div>
+                        <div class="why-text">
+                            <h4><%=product.title.substring(0,20)%></h4>
+                            <h4>MRP:
+                               <% if(product.discountPercentage){%><span>&#8377</span>
+                                <del class="text-danger"> <%=product.price%></del><br>Deal of The Day:
+                                <span class="text-success"><%=Math.round(product.price-(product.price)*(product.discountPercentage)/100)%>Rs.</span>
+                                <%}else{%>
+                                    <span class="text-success"><%=product.price%></span>
+
+                               <%}%>
+                                </h4>     
+                           
+                        </div>
+                    </div>
+                </div>
+                <%})%>
+            </div>
+        </div>
+    </div>
+    <!-- End Products  -->
+
+    <!-- Start Blog  -->
+    
+    
+    <%- include('footer.ejs')%>
+
+   <%- include('externalscript.ejs')%>
+   <script>
+    function addInCart(userId, productId){
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET","/cart/add-to-cart/"+userId+"/"+productId,true);
+      xhttp.send();
+      xhttp.onreadystatechange = function(){
+        if(xhttp.readyState == 4){
+          let data = JSON.parse(xhttp.responseText);
+          window.alert(data.message);
+        }
+      }
+    }
+
+
+  function  status(productId){
+    var status=1;
+   var xhttp=new XMLHttpRequest();
+   xhttp.open("GET","/wishlist/"+productId+"/"+status,true);
+   xhttp.send();
+   var heart=document.getElementById("heart");
+      heart.style.color="blue";
+   xhttp.onreadystatechange=function(){
+    
+    if(xhttp.readyState ==4){
+    
+    }
+   }
+  }
+ </script>
+
+</body>
+
+</html>
