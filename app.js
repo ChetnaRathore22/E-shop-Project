@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use(session({secret:"asdfghjklkjhgfd",saveUninitialized:"true", resave:true}))
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
 app.use("/",IndexRoute);
 app.use("/cart",CartRoute);
 app.use("/order",orderRoute);
